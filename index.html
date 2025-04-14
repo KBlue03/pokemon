@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>聲音分類 Demo</title>
+</head>
+<body>
+  <h1>🎤 Teachable Machine 聲音分類</h1>
+  <button onclick="init()">開始辨識</button>
+  <div id="label-container"></div>
+
+  <!-- 引入 Teachable Machine 音訊套件 -->
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/audio@0.8/dist/teachablemachine-audio.min.js"></script>
+
+  <script type="text/javascript">
+    // 替換成你的模型網址
+    const URL = "https://teachablemachine.withgoogle.com/models/ft3fr1imo/";
+
+    let model, labelContainer, maxPredictions;
+
+    async function init() {
+      const modelURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+
+      // 載入模型與 metadata
+      model = await tmAudio.load(modelURL, metadataURL);
+      maxPredictions = model.getTotalClasses();
+
+      // 建立標籤顯示區域
+      labelContainer = document.getElementById("label-container");
+      labelContainer.innerHTML = '';
+      for (let i = 0; i < maxPredictions; i++) {
+        labelContainer.appendChild(document.createElement("div"));
+      }
+
+      // 開始聽聲音
+      model.listen(result => {
+        for (let i = 0; i < maxPredictions; i++) {
+          const classPrediction =
+            result[i].className + ": " + (result[i].probability * 100).toFixed(2) + "%";
+          labelContainer.childNodes[i].innerHTML = classPrediction;
+        }
+      }, {
+        includeSpectrogram: true,
+        probabilityThreshold: 0.75 // 設定辨識門檻
+      });
+
+      console.log("模型已開始監聽");
+    }
+
+    // 離開頁面時停止偵測
+    window.addEventListener('beforeunload', () => {
+      if (model) {
+        model.stopListening();
+      }
+    });
+  </script>
+</body>
+</html>
