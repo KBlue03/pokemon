@@ -12,8 +12,8 @@
     const URL = "https://teachablemachine.withgoogle.com/models/ft3fr1imo/";
 
     async function createModel() {
-        const checkpointURL = URL + "model.json"; // model topology
-        const metadataURL = URL + "metadata.json"; // model metadata
+        const checkpointURL = URL + "model.json" + Date.now(); // model topology
+        const metadataURL = URL + "metadata.json" + Date.now(); // model metadata
 
         const recognizer = speechCommands.create(
             "BROWSER_FFT", // fourier transform type, not useful to change
