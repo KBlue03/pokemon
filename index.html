@@ -60,10 +60,10 @@
 
     <script>
         const URL = "https://teachablemachine.withgoogle.com/models/ft3fr1imo/";
-        //const customLabels = [
-        //    "蒼響", "藏瑪然特", "密勒頓", "超夢", "夢幻",
-        //    "巨金怪", "班基拉斯", "噴火龍", "水箭龜", "妙蛙花"
-       // ];
+        const customLabels = [
+            "蒼響", "藏瑪然特", "密勒頓", "超夢", "夢幻",
+            "巨金怪", "班基拉斯", "噴火龍", "水箭龜", "妙蛙花"
+        ];
 
         async function createModel() {
             const checkpointURL = URL + "model.json";
@@ -97,7 +97,7 @@
                     }
                 }
 
-                if (maxScore > 0.5) {
+                if (maxScore > 0.85) {
                     alertBox.style.display = "block";
                     alertBox.innerText = `⚡ 偵測到六星：「${bestLabel}」的機率為 ${(maxScore * 100).toFixed(1)}%！`;
                 } else {
